@@ -1,5 +1,7 @@
 package br.com.zup.proposta.dto;
 
+import br.com.zup.proposta.enums.StatusSolicitacao;
+
 public class ResponseConsultaDoSolicitanteDto {
 
 	private String documento;
@@ -27,5 +29,14 @@ public class ResponseConsultaDoSolicitanteDto {
 	public String toString() {
 		return "ResponseConsultaDoSolicitanteDto [documento=" + documento + ", nome=" + nome + ", resutadoSolicitacao="
 				+ resultadoSolicitacao + ", idProposta=" + idProposta + "]";
+	}
+	
+	public boolean verificaSePropostaTemRestricao() {
+		
+		if (this.resultadoSolicitacao.equals(StatusSolicitacao.COM_RESTRICAO)) {
+			return true;
+		}
+		
+		return false;
 	}
 }
