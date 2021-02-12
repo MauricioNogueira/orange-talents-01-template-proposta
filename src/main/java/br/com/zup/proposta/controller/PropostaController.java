@@ -17,7 +17,7 @@ import br.com.zup.proposta.requests.CadastroPropostaRequest;
 import br.com.zup.proposta.service.PropostaService;
 
 @RestController
-@RequestMapping("/propostas")
+@RequestMapping("/api/propostas")
 public class PropostaController {
 	
 	private final PropostaService propostaService;

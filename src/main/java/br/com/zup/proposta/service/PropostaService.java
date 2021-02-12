@@ -51,7 +51,7 @@ public class PropostaService {
 			}
 			
 			logger.error("Erro interno no sistema: " + e.contentUTF8());
-			throw new FeignCustomExcepition("Erro qualquer aqui", HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new FeignCustomExcepition("Erro no sistema", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }
