@@ -1,9 +1,11 @@
 package br.com.zup.proposta.dto;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import br.com.zup.proposta.enums.StatusSolicitacao;
 
 public class ResponseConsultaDoSolicitanteDto {
-
 	private String documento;
 	private String nome;
 	private String resultadoSolicitacao;
@@ -38,5 +40,17 @@ public class ResponseConsultaDoSolicitanteDto {
 		}
 		
 		return false;
+	}
+	
+	public StatusSolicitacao getResultStatusSolicitacao() {
+		return StatusSolicitacao.valueOf(this.getResultadoSolicitacao());
+	}
+	
+	public void converteJson(ObjectMapper mapper, String json) {
+		try {
+			this.resultadoSolicitacao = mapper.readValue(json, this.getClass()).getResultadoSolicitacao();
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
 	}
 }

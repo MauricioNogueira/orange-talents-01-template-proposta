@@ -31,7 +31,7 @@ public class PropostaController {
 		
 		Proposta proposta = this.propostaService.cadastrar(request);
 		
-		URI location = uriComponentsBuilder.path("/propostas/{id}").buildAndExpand(proposta.getId()).toUri();
+		URI location = uriComponentsBuilder.path("/api/propostas/{id}").buildAndExpand(proposta.getId()).toUri();
 		
 		return ResponseEntity.created(location).body(new PropostaDto(proposta));
 	}

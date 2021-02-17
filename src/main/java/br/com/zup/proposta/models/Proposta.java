@@ -12,6 +12,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
+import br.com.zup.proposta.enums.StatusSolicitacao;
 import br.com.zup.proposta.validations.CPFOuCNPJ;
 
 @Entity
@@ -39,6 +40,8 @@ public class Proposta {
 	@NotNull
 	@PositiveOrZero
 	private BigDecimal salario;
+	
+	private String status;
 	
 	@Deprecated
 	public Proposta() {}
@@ -74,10 +77,18 @@ public class Proposta {
 	public BigDecimal getSalario() {
 		return salario;
 	}
+	
+	public String getStatus() {
+		return this.status;
+	}
+	
+	public void setStatus(StatusSolicitacao statusSolicitacao) {
+		this.status = statusSolicitacao.getValue();
+	}
 
 	@Override
 	public String toString() {
 		return "Proposta [id=" + id + ", documento=" + documento + ", email=" + email + ", nome=" + nome + ", endereco="
-				+ endereco + ", salario=" + salario + "]";
+				+ endereco + ", salario=" + salario + ", status=" + status + "]";
 	}
 }
