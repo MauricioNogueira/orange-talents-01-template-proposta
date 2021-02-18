@@ -35,14 +35,16 @@ public class PropostaService {
 		Proposta proposta = request.toModel(this.propostaRepository);
 		ResponseConsultaDoSolicitanteDto response = null;
 		
+		proposta = this.propostaRepository.save(proposta);
+		
 		try {
 			
-			response = this.consultaDadosDoSolicitanteService.consultar(new ConsultaRequest(request.getDocumento(), request.getNome(), null));
+			response = this.consultaDadosDoSolicitanteService.consultar(new ConsultaRequest(request.getDocumento(), request.getNome(), proposta.getId()));
 			
 		} catch (FeignException e) {
 			
 			if (e.status() == 422) {
-				logger.warn("documento não foi encontrado: "+e.contentUTF8());
+				logger.warn("documento com restrição: "+e.contentUTF8());
 				String json = e.contentUTF8();
 				
 				response = new ResponseConsultaDoSolicitanteDto();

@@ -1,11 +1,17 @@
 package br.com.zup.proposta.dto;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.zup.proposta.enums.StatusSolicitacao;
+import br.com.zup.proposta.service.PropostaService;
 
 public class ResponseConsultaDoSolicitanteDto {
+	private final Logger logger = LoggerFactory.getLogger(ResponseConsultaDoSolicitanteDto.class);
+	
 	private String documento;
 	private String nome;
 	private String resultadoSolicitacao;
@@ -51,6 +57,7 @@ public class ResponseConsultaDoSolicitanteDto {
 			this.resultadoSolicitacao = mapper.readValue(json, this.getClass()).getResultadoSolicitacao();
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
+			logger.error("Erro ao pegar status da solicitação da proposta");
 		}
 	}
 }

@@ -2,11 +2,14 @@ package br.com.zup.proposta.models;
 
 import java.math.BigDecimal;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -42,6 +45,9 @@ public class Proposta {
 	private BigDecimal salario;
 	
 	private String status;
+	
+	@OneToOne(mappedBy = "proposta")
+	private Cartao cartao;
 	
 	@Deprecated
 	public Proposta() {}
@@ -86,9 +92,17 @@ public class Proposta {
 		this.status = statusSolicitacao.getValue();
 	}
 
+	public Cartao getCartao() {
+		return cartao;
+	}
+
 	@Override
 	public String toString() {
 		return "Proposta [id=" + id + ", documento=" + documento + ", email=" + email + ", nome=" + nome + ", endereco="
 				+ endereco + ", salario=" + salario + ", status=" + status + "]";
+	}
+
+	public void vincularCartao(Cartao cartao) {
+		this.cartao = cartao;
 	}
 }
