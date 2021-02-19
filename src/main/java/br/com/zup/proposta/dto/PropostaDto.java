@@ -2,6 +2,7 @@ package br.com.zup.proposta.dto;
 
 import java.math.BigDecimal;
 
+import br.com.zup.proposta.enums.StatusSolicitacao;
 import br.com.zup.proposta.models.Proposta;
 
 public class PropostaDto {
@@ -11,6 +12,7 @@ public class PropostaDto {
 	private String documento;
 	private String endereco;
 	private BigDecimal salario;
+	private String status;
 	
 	public PropostaDto(Proposta proposta) {
 		this.nome = proposta.getNome();
@@ -18,6 +20,7 @@ public class PropostaDto {
 		this.documento = proposta.getDocumento();
 		this.endereco = proposta.getEndereco();
 		this.salario = proposta.getSalario();
+		this.status = proposta.getStatus();
 	}
 
 	public String getNome() {
@@ -38,5 +41,9 @@ public class PropostaDto {
 
 	public BigDecimal getSalario() {
 		return salario;
+	}
+	
+	public String getStatus() {
+		return this.status;
 	}
 }

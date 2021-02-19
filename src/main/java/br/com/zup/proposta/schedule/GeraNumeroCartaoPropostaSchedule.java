@@ -1,5 +1,6 @@
 package br.com.zup.proposta.schedule;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +15,7 @@ import br.com.zup.proposta.repository.PropostaRepository;
 import br.com.zup.proposta.service.VinculaNumeroCartaoPropostaService;
 
 @Service
+@Profile("dev")
 @EnableAsync
 @EnableScheduling
 public class GeraNumeroCartaoPropostaSchedule {

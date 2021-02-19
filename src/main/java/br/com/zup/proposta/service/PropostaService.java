@@ -1,5 +1,7 @@
 package br.com.zup.proposta.service;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -7,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.zup.proposta.dto.PropostaDto;
 import br.com.zup.proposta.dto.ResponseConsultaDoSolicitanteDto;
+import br.com.zup.proposta.enums.StatusSolicitacao;
 import br.com.zup.proposta.exceptions.FeignCustomExcepition;
 import br.com.zup.proposta.models.Proposta;
 import br.com.zup.proposta.repository.PropostaRepository;
@@ -60,5 +64,17 @@ public class PropostaService {
 		logger.info("Proposta cadastrada: "+response);
 		
 		return this.propostaRepository.save(proposta);
+	}
+
+	public PropostaDto findById(Long id) {
+		Optional<Proposta> optional = this.propostaRepository.findById(id);
+		
+		if (optional.isPresent()) {
+			logger.info("Proposta foi encontrada: " + optional.get());
+			return new PropostaDto(optional.get());
+		}
+		
+		logger.error("Proposta com código "+id+" não foi encontrada");
+		return null;
 	}
 }
