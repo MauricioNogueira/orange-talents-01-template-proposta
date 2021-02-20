@@ -2,6 +2,8 @@ package br.com.zup.proposta.service;
 
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -11,7 +13,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.zup.proposta.dto.PropostaDto;
 import br.com.zup.proposta.dto.ResponseConsultaDoSolicitanteDto;
-import br.com.zup.proposta.enums.StatusSolicitacao;
 import br.com.zup.proposta.exceptions.FeignCustomExcepition;
 import br.com.zup.proposta.models.Proposta;
 import br.com.zup.proposta.repository.PropostaRepository;
@@ -34,6 +35,7 @@ public class PropostaService {
 		this.mapper = mapper;
 	}
 
+	@Transactional
 	public Proposta cadastrar(CadastroPropostaRequest request) {
 		
 		Proposta proposta = request.toModel(this.propostaRepository);
@@ -55,6 +57,7 @@ public class PropostaService {
 				response.converteJson(mapper, json);
 			} else {				
 				logger.error("Erro interno no sistema: " + e.getMessage());
+				e.printStackTrace();
 				throw new FeignCustomExcepition("Erro no sistema", HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}

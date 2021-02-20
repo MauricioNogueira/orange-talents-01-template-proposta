@@ -10,6 +10,6 @@ import br.com.zup.proposta.response.DadosCartaoResponse;
 @FeignClient(url = "${api.accounts}", name = "accounts")
 public interface AccountsService {
 
-	@RequestMapping(method = RequestMethod.GET, value = "/api/cartoes")
+	@RequestMapping(method = RequestMethod.GET, value = "/cartoes")
 	public DadosCartaoResponse verificarCartao(@RequestParam("idProposta") Long idProposta);
 }

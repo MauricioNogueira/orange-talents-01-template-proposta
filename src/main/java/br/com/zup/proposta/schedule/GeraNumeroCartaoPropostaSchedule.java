@@ -15,7 +15,7 @@ import br.com.zup.proposta.repository.PropostaRepository;
 import br.com.zup.proposta.service.VinculaNumeroCartaoPropostaService;
 
 @Service
-@Profile("dev")
+@Profile(value = {"dev", "prod"})
 @EnableAsync
 @EnableScheduling
 public class GeraNumeroCartaoPropostaSchedule {

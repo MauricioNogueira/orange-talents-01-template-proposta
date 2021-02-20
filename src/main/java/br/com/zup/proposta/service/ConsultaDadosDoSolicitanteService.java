@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import br.com.zup.proposta.dto.ResponseConsultaDoSolicitanteDto;
 import br.com.zup.proposta.requests.ConsultaRequest;
 
-@FeignClient(url = "${api.consulta.documento}", name = "consulta")
+@FeignClient(url = "${api.analise}", name = "consulta")
 public interface ConsultaDadosDoSolicitanteService {
 
-	@RequestMapping(method = RequestMethod.POST, value = "/api/solicitacao")
+	@RequestMapping(method = RequestMethod.POST, value = "/solicitacao")
 	public ResponseConsultaDoSolicitanteDto consultar(ConsultaRequest request);
 }

@@ -133,6 +133,23 @@ services:
       VAULT_DEV_ROOT_TOKEN_ID: ee413645-dbe8-4848-afc6-6bb2768ada75
       VAULT_TOKEN: ee413645-dbe8-4848-afc6-6bb2768ada75
       VAULT_ADDR: http://127.0.0.1:8200
+      
+  proposta:
+    image: proposta/proposta
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      SERVER_PORT: "8000"
+      API_ACCOUNTS: http://contas:8888/api
+      API_ANALISE: http://analise:9999/api
+      HEALTH: "health"
+    depends_on:
+      - postgres
+      - analise
+      - contas
 
 volumes:
   grafana-volume:
