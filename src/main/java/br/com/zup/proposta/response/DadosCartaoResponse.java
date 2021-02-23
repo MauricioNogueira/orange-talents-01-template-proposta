@@ -3,6 +3,9 @@ package br.com.zup.proposta.response;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,11 +18,22 @@ public class DadosCartaoResponse {
 	
 	private final Logger logger = LoggerFactory.getLogger(DadosCartaoResponse.class);
 
+	@NotBlank
 	private String id;
+	
+	@NotNull
 	private LocalDateTime emitidoEm;
+	
+	@NotBlank
 	private String titular;
+	
+	@NotNull
 	private BigDecimal limite;
+	
+	@NotNull
 	private VencimentoResponse vencimento;
+	
+	@NotBlank
 	private Long idProposta;
 
 	public DadosCartaoResponse(String id, LocalDateTime emitidoEm, String titular, BigDecimal limite,
