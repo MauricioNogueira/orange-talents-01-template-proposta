@@ -10,11 +10,13 @@ import javax.validation.constraints.Positive;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
 import br.com.zup.proposta.exceptions.DataIntegrityException;
 import br.com.zup.proposta.models.Proposta;
 import br.com.zup.proposta.repository.PropostaRepository;
+import br.com.zup.proposta.util.AESUtil;
 import br.com.zup.proposta.validations.CPFOuCNPJ;
 
 

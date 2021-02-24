@@ -7,7 +7,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.zup.proposta.enums.StatusSolicitacao;
-import br.com.zup.proposta.service.PropostaService;
 
 public class ResponseConsultaDoSolicitanteDto {
 	private final Logger logger = LoggerFactory.getLogger(ResponseConsultaDoSolicitanteDto.class);

@@ -7,9 +7,10 @@ import org.hibernate.validator.internal.constraintvalidators.hv.br.CNPJValidator
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CPFValidator;
 
 public class CPFOuCNPJValidator implements ConstraintValidator<CPFOuCNPJ, String> {
-
+	
 	@Override
 	public boolean isValid(String value, ConstraintValidatorContext context) {
+		
 		CPFValidator cpfValidator = new CPFValidator();
 		cpfValidator.initialize(null);
 		

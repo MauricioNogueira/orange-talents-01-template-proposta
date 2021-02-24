@@ -2,8 +2,10 @@ package br.com.zup.proposta.controller;
 
 import java.net.URI;
 
+import javax.crypto.spec.IvParameterSpec;
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +19,7 @@ import br.com.zup.proposta.dto.PropostaDto;
 import br.com.zup.proposta.models.Proposta;
 import br.com.zup.proposta.requests.CadastroPropostaRequest;
 import br.com.zup.proposta.service.PropostaService;
+import br.com.zup.proposta.util.AESUtil;
 
 @RestController
 @RequestMapping("/api/propostas")

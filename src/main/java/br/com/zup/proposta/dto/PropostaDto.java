@@ -2,7 +2,6 @@ package br.com.zup.proposta.dto;
 
 import java.math.BigDecimal;
 
-import br.com.zup.proposta.enums.StatusSolicitacao;
 import br.com.zup.proposta.models.Proposta;
 
 public class PropostaDto {

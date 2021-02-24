@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.zup.proposta.repository.PropostaRepository;
 import br.com.zup.proposta.requests.CadastroPropostaRequest;
+import br.com.zup.proposta.util.AESUtil;
 import br.com.zup.proposta.utils.CriaRequestCadastroProposta;
 
 @SpringBootTest
@@ -34,6 +35,9 @@ class PropostaControllerTest {
 	
 	@Autowired
 	private ObjectMapper mapper;
+	
+	@Autowired
+	private AESUtil aesUtil;
 	
 	@AfterEach
 	public void afterEach() {
