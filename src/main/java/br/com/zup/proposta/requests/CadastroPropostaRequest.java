@@ -72,7 +72,7 @@ public class CadastroPropostaRequest {
 		return salario;
 	}
 	
-	public Proposta toModel(PropostaRepository propostaRepository) {
+	public Proposta toModel(PropostaRepository propostaRepository, AESUtil aesUtil) {
 		
 		Optional<Proposta> optional = propostaRepository.findByDocumento(documento);
 		
@@ -81,7 +81,7 @@ public class CadastroPropostaRequest {
 			
 			throw new DataIntegrityException("documento já existe", HttpStatus.UNPROCESSABLE_ENTITY);
 		}
-		
+
 		return new Proposta(this.documento, this.email, this.nome, this.endereco, this.salario);
 	}
 }

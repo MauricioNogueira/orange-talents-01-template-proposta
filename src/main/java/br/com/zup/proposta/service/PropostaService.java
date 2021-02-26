@@ -6,6 +6,7 @@ import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +19,14 @@ import br.com.zup.proposta.models.Proposta;
 import br.com.zup.proposta.repository.PropostaRepository;
 import br.com.zup.proposta.requests.CadastroPropostaRequest;
 import br.com.zup.proposta.requests.ConsultaRequest;
+import br.com.zup.proposta.util.AESUtil;
 import feign.FeignException;
 
 @Service
 public class PropostaService {
 	
+	@Autowired
+	private AESUtil aesUtil;
 	private final ConsultaDadosDoSolicitanteService consultaDadosDoSolicitanteService;
 	private final PropostaRepository propostaRepository;
 	private final Logger logger = LoggerFactory.getLogger(PropostaService.class);
@@ -38,7 +42,7 @@ public class PropostaService {
 	@Transactional
 	public Proposta cadastrar(CadastroPropostaRequest request) {
 		
-		Proposta proposta = request.toModel(this.propostaRepository);
+		Proposta proposta = request.toModel(this.propostaRepository, this.aesUtil);
 		ResponseConsultaDoSolicitanteDto response = null;
 		
 		proposta = this.propostaRepository.save(proposta);

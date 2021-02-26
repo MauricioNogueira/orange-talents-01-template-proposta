@@ -2,6 +2,7 @@ package br.com.zup.proposta.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.zup.proposta.models.Cartao;
@@ -9,11 +10,15 @@ import br.com.zup.proposta.models.Proposta;
 import br.com.zup.proposta.repository.CartaoRepository;
 import br.com.zup.proposta.repository.VencimentoRepository;
 import br.com.zup.proposta.response.DadosCartaoResponse;
+import br.com.zup.proposta.util.AESUtil;
 import feign.FeignException;
 
 @Service
 public class VinculaNumeroCartaoPropostaService {
 
+	@Autowired
+	private AESUtil aesUtil;
+	
 	private final AccountsService accountsService;
 	private final CartaoRepository cartaoRepository;
 	private final VencimentoRepository vencimentoRepository;
@@ -34,7 +39,7 @@ public class VinculaNumeroCartaoPropostaService {
 		try {
 			DadosCartaoResponse response = this.accountsService.verificarCartao(proposta.getId());
 			
-			Cartao cartao = response.toModel(proposta, this.vencimentoRepository);
+			Cartao cartao = response.toModel(proposta, this.vencimentoRepository, this.aesUtil);
 			
 			cartao = this.cartaoRepository.save(cartao);
 			

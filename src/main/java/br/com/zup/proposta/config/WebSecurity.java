@@ -13,10 +13,10 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable().authorizeRequests(authorizeRequests ->
         authorizeRequests
-                .antMatchers(HttpMethod.GET, "/api/propostas/**").hasAuthority("SCOPE_proposta")
+                .antMatchers(HttpMethod.GET, "/api/propostas/**").hasAuthority("SCOPE_proposta:read")
 //                .antMatchers(HttpMethod.GET, "/api/cartoes/**").hasAuthority("SCOPE_cartoes:read")
-//                .antMatchers(HttpMethod.POST, "/api/cartoes/**").hasAuthority("SCOPE_cartoes")
-                .antMatchers(HttpMethod.POST, "/api/propostas/**").hasAuthority("SCOPE_proposta")
+                .antMatchers(HttpMethod.POST, "/api/cartoes/**").hasAuthority("SCOPE_cartoes:write")	
+                .antMatchers(HttpMethod.POST, "/api/propostas/**").hasAuthority("SCOPE_proposta:write")
                 .anyRequest().authenticated()
 		).oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
 	}
