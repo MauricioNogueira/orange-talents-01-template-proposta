@@ -1,28 +1,18 @@
 package br.com.zup.proposta.requests;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-
-import br.com.zup.proposta.exceptions.DataIntegrityException;
 import br.com.zup.proposta.models.Proposta;
-import br.com.zup.proposta.repository.PropostaRepository;
 import br.com.zup.proposta.util.AESUtil;
 import br.com.zup.proposta.validations.CPFOuCNPJ;
 
 
 public class CadastroPropostaRequest {
-	
-	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 	
 	@NotBlank
 	@CPFOuCNPJ
@@ -72,16 +62,7 @@ public class CadastroPropostaRequest {
 		return salario;
 	}
 	
-	public Proposta toModel(PropostaRepository propostaRepository, AESUtil aesUtil) {
-		
-		Optional<Proposta> optional = propostaRepository.findByDocumento(documento);
-		
-		if (optional.isPresent()) {
-			logger.warn("Documento informado já existe na base de dados: " + documento);
-			
-			throw new DataIntegrityException("documento já existe", HttpStatus.UNPROCESSABLE_ENTITY);
-		}
-
+	public Proposta toModel() {
 		return new Proposta(this.documento, this.email, this.nome, this.endereco, this.salario);
 	}
 }

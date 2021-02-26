@@ -14,35 +14,37 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.zup.proposta.dto.PropostaDto;
 import br.com.zup.proposta.dto.ResponseConsultaDoSolicitanteDto;
+import br.com.zup.proposta.exceptions.DataIntegrityException;
 import br.com.zup.proposta.exceptions.FeignCustomExcepition;
 import br.com.zup.proposta.models.Proposta;
 import br.com.zup.proposta.repository.PropostaRepository;
 import br.com.zup.proposta.requests.CadastroPropostaRequest;
 import br.com.zup.proposta.requests.ConsultaRequest;
-import br.com.zup.proposta.util.AESUtil;
 import feign.FeignException;
 
 @Service
 public class PropostaService {
 	
 	@Autowired
-	private AESUtil aesUtil;
-	private final ConsultaDadosDoSolicitanteService consultaDadosDoSolicitanteService;
-	private final PropostaRepository propostaRepository;
+	private ConsultaDadosDoSolicitanteService consultaDadosDoSolicitanteService;
+	@Autowired
+	private PropostaRepository propostaRepository;
+	@Autowired
+	private ObjectMapper mapper;
 	private final Logger logger = LoggerFactory.getLogger(PropostaService.class);
-	private final ObjectMapper mapper;
-	
-	public PropostaService(ConsultaDadosDoSolicitanteService consultaDadosDoSolicitanteService,
-			PropostaRepository propostaRepository, ObjectMapper mapper) {
-		this.consultaDadosDoSolicitanteService = consultaDadosDoSolicitanteService;
-		this.propostaRepository = propostaRepository;
-		this.mapper = mapper;
-	}
 
 	@Transactional
 	public Proposta cadastrar(CadastroPropostaRequest request) {
+		Optional<Proposta> optional = this.propostaRepository.findByDocumento(request.getDocumento());
 		
-		Proposta proposta = request.toModel(this.propostaRepository, this.aesUtil);
+		if (optional.isPresent()) {
+			logger.warn("Documento informado já existe na base de dados: " + request.getDocumento());
+			
+			throw new DataIntegrityException("documento já existe", HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+		
+		Proposta proposta = request.toModel();
+		
 		ResponseConsultaDoSolicitanteDto response = null;
 		
 		proposta = this.propostaRepository.save(proposta);

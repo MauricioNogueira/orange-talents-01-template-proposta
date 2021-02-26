@@ -44,6 +44,6 @@ public class CartaoController {
 		
 		ResponseDto response = this.cartaoService.bloquear(idCartao, request);
 		
-		return ResponseEntity.status(response.getStatus()).body(response);
+		return ResponseEntity.status(response.getStatus()).body(response);		
 	}
 }

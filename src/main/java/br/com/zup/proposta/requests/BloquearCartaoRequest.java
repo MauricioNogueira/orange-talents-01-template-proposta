@@ -5,21 +5,26 @@ import javax.validation.constraints.NotBlank;
 public class BloquearCartaoRequest {
 
 	@NotBlank
-	private String ip;
+	private String ipDoido;
 	
 	@NotBlank
 	private String userAgent;
 	
-	public BloquearCartaoRequest(String ip, String userAgent) {
-		this.ip = ip;
+	public BloquearCartaoRequest(String ipDoido, String userAgent) {
+		this.ipDoido = ipDoido;
 		this.userAgent = userAgent;
 	}
 
 	public String getIp() {
-		return ip;
+		return ipDoido;
 	}
 
 	public String getUserAgent() {
 		return userAgent;
+	}
+
+	@Override
+	public String toString() {
+		return "BloquearCartaoRequest [ip=" + ipDoido + ", userAgent=" + userAgent + "]";
 	}
 }

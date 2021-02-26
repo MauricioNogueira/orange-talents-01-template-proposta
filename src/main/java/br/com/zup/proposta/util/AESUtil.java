@@ -130,13 +130,13 @@ public class AESUtil {
 	    return null;
 	}
 	
-	public boolean isCrypt(String text) {
+	public boolean isEncrypt(String text) {
 		try {
 			this.decrypt(text);
+			
 			return true;
 		} catch (IllegalArgumentException e) {
-			// TODO: handle exception
+			return false;
 		}
-		return false;
 	}
 }

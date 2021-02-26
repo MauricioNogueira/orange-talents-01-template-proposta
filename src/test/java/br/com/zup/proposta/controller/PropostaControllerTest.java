@@ -74,7 +74,7 @@ class PropostaControllerTest {
 				.salario(new BigDecimal("2500"))
 				.build();
 		
-		this.propostaRepository.save(request.toModel(propostaRepository, aesUtil));
+		this.propostaRepository.save(request.toModel());
 		
 		CadastroPropostaRequest request2 = new CriaRequestCadastroProposta()
 				.nome("fulano")

@@ -61,7 +61,7 @@ services:
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: password
       POSTGRES_PORT_5432_TCP_ADDR: 127.0.0.1
-      KEYCLOAK_FRONTEND_URL: http://localhost:18080/auth
+      #KEYCLOAK_FRONTEND_URL: http://keycloak:18080/auth
 
   analise:
     image: 'zupacademy/analise-financeira'
@@ -147,10 +147,18 @@ services:
       API_ACCOUNTS: http://contas:8888/api
       API_ANALISE: http://analise:9999/api
       HEALTH: "health"
+      SPRING_SECURITY_OAUTH2_ISSUER_URI: http://keycloak:8080/auth/realms/proposta
+      SPRING_SECURITY_OAUTH2_SET_URI: http://keycloak:8080/auth/realms/proposta/protocol/openid-connect/certs
+      AES_CRYPT_SALT: "1234"
+      AES_CRYPT_PASSWORD: zup-proposta
+      # AES_CRYPT_KEY é necessário ter 16 caracteres
+      AES_CRYPT_KEY: "0000000000000000"
+      SPRING_PROFILES_ACTIVE: prod
     depends_on:
       - postgres
       - analise
       - contas
+      - keycloak
 
 volumes:
   grafana-volume:

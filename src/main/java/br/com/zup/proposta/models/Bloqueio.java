@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 
 @Entity
-public class Cancelado {
+public class Bloqueio {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,9 +26,9 @@ public class Cancelado {
 	private LocalDateTime data = LocalDateTime.now();
 	
 	@Deprecated
-	public Cancelado() {}
+	public Bloqueio() {}
 	
-	public Cancelado(@NotBlank String ip, @NotBlank String userAgent, @NotBlank String numeroCartao) {
+	public Bloqueio(@NotBlank String ip, @NotBlank String userAgent, @NotBlank String numeroCartao) {
 		this.ip = ip;
 		this.userAgent = userAgent;
 		this.numeroCartao = numeroCartao;
@@ -56,7 +56,7 @@ public class Cancelado {
 
 	@Override
 	public String toString() {
-		return "Cancelado [id=" + id + ", numeroCartao=" + numeroCartao + ", ip=" + ip + ", userAgent=" + userAgent
+		return "Bloqueio [id=" + id + ", numeroCartao=" + numeroCartao + ", ip=" + ip + ", userAgent=" + userAgent
 				+ ", data=" + data + "]";
 	}
 }
