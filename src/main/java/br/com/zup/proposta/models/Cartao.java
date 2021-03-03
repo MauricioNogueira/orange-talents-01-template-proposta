@@ -36,6 +36,8 @@ public class Cartao {
 	@OneToMany(mappedBy = "cartao")
 	private List<Biometria> biometria;
 	
+	private String status;
+	
 	@Deprecated
 	public Cartao() {}
 	
@@ -45,6 +47,10 @@ public class Cartao {
 		this.titular = titular;
 		this.proposta = proposta;
 		this.vencimento = vencimento;
+	}
+	
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public String getId() {

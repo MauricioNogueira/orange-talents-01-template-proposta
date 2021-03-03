@@ -25,6 +25,8 @@ public class Bloqueio {
 	private String userAgent;
 	private LocalDateTime data = LocalDateTime.now();
 	
+	private boolean notificated = false;
+	
 	@Deprecated
 	public Bloqueio() {}
 	
@@ -52,6 +54,14 @@ public class Bloqueio {
 
 	public String getNumeroCartao() {
 		return numeroCartao;
+	}
+	
+	public boolean getNotificated() {
+		return notificated;
+	}
+	
+	public void setNotificated(boolean notificated) {
+		this.notificated = notificated;
 	}
 
 	@Override

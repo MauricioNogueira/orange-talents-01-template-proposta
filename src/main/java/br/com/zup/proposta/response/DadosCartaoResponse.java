@@ -80,7 +80,7 @@ public class DadosCartaoResponse {
 	public Cartao toModel(Proposta proposta, VencimentoRepository vencimentoRepository, AESUtil aesUtil) {
 		Vencimento vencimento = this.getVencimento().toModel(vencimentoRepository);
 		
-		Cartao cartao = new Cartao(aesUtil.encrypt(this.id), this.emitidoEm, this.titular, proposta, vencimento);
+		Cartao cartao = new Cartao(this.id, this.emitidoEm, this.titular, proposta, vencimento);
 		
 		logger.info("Cartão cadastrado: " + cartao);
 		

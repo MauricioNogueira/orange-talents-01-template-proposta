@@ -23,7 +23,7 @@ import br.com.zup.proposta.models.Biometria;
 import br.com.zup.proposta.models.Bloqueio;
 import br.com.zup.proposta.models.Cartao;
 import br.com.zup.proposta.repository.BiometriaRepository;
-import br.com.zup.proposta.repository.BloqueiaRepository;
+import br.com.zup.proposta.repository.BloqueioRepository;
 import br.com.zup.proposta.repository.CartaoRepository;
 import br.com.zup.proposta.requests.CadastroBiometriaRequest;
 import br.com.zup.proposta.util.ClientIpUtil;
@@ -33,7 +33,7 @@ import br.com.zup.proposta.util.ClientIpUtil;
 public class CartaoService {
 	
 	@Autowired
-	private BloqueiaRepository bloqueiaRepository;
+	private BloqueioRepository bloqueiaRepository;
 	
 	private final BiometriaRepository biometriaRepository;
 	private final CartaoRepository cartaoRepository;
