@@ -5,6 +5,7 @@ import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.actuate.health.Status;
@@ -12,6 +13,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class APIDadosSolicitante implements HealthIndicator {
+	
+	@Value("${api.analise}")
+	private String uriAnalise;
 
 	@Override
 	public Health health() {
@@ -32,7 +36,7 @@ public class APIDadosSolicitante implements HealthIndicator {
 		boolean flag = false;
 		
 		try {
-			URL url = new URL("http://localhost:9999");
+			URL url = new URL(this.uriAnalise);
 			URLConnection connection = url.openConnection();
 			connection.connect();
 			
