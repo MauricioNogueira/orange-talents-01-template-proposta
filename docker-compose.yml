@@ -63,7 +63,7 @@ services:
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: password
       POSTGRES_PORT_5432_TCP_ADDR: 127.0.0.1
-      KEYCLOAK_FRONTEND_URL: http://keycloak:8080/auth
+      #KEYCLOAK_FRONTEND_URL: http://keycloak:8080/auth
 
   analise:
     image: 'zupacademy/analise-financeira'
@@ -156,8 +156,8 @@ services:
       # AES_CRYPT_KEY é necessário ter 16 caracteres
       AES_CRYPT_KEY: "0000000000000000"
       SPRING_PROFILES_ACTIVE: prod
-      METRICS_NOME_DA_APLICACAO: ""
-      METRICS_AMBIENTE: ""
+      METRICS_NOME_DA_APLICACAO: "servico de proposta"
+      METRICS_AMBIENTE: "desenvolvimento"
     depends_on:
       - postgres
       - analise

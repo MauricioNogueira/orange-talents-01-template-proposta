@@ -16,6 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.zup.proposta.dto.BiometriaDto;
 import br.com.zup.proposta.dto.ResponseDto;
+import br.com.zup.proposta.requests.AvisoViagemRequest;
 import br.com.zup.proposta.requests.CadastroBiometriaRequest;
 import br.com.zup.proposta.service.CartaoService;
 
@@ -45,5 +46,13 @@ public class CartaoController {
 		ResponseDto response = this.cartaoService.bloquear(idCartao, request);
 		
 		return ResponseEntity.status(response.getStatus()).body(response);		
+	}
+	
+	@PostMapping("/{id}/aviso-viagem")
+	public ResponseEntity<ResponseDto> avisoViagem(@RequestBody @Valid AvisoViagemRequest request, @PathVariable("id") String identificadorCartao, HttpServletRequest servlet) {
+		
+		ResponseDto response = this.cartaoService.registrarAvisoViagem(request, identificadorCartao, servlet);
+		
+		return ResponseEntity.status(response.getStatus()).body(response);
 	}
 }

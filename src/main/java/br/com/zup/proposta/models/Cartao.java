@@ -2,6 +2,7 @@ package br.com.zup.proposta.models;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -12,6 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import br.com.zup.proposta.enums.StatusCartao;
 
 @Entity
 public class Cartao {
@@ -36,7 +39,10 @@ public class Cartao {
 	@OneToMany(mappedBy = "cartao")
 	private List<Biometria> biometria;
 	
-	private String status;
+	@Enumerated(EnumType.STRING)
+	private StatusCartao status;
+	
+	private String identificador;
 	
 	@Deprecated
 	public Cartao() {}
@@ -47,9 +53,10 @@ public class Cartao {
 		this.titular = titular;
 		this.proposta = proposta;
 		this.vencimento = vencimento;
+		this.identificador = UUID.randomUUID().toString();
 	}
 	
-	public void setStatus(String status) {
+	public void setStatus(StatusCartao status) {
 		this.status = status;
 	}
 
@@ -68,9 +75,13 @@ public class Cartao {
 	public Proposta getProposta() {
 		return proposta;
 	}
+	
+	public String getIdentificador() {
+		return this.identificador;
+	}
 
 	@Override
 	public String toString() {
-		return "Cartao [id=" + id + ", emitidoEm=" + emitidoEm + ", titular=" + titular + "]";
+		return "Cartao [id=" + id + ", emitidoEm=" + emitidoEm + ", titular=" + titular + ", identificador=" + identificador +"]";
 	}
 }

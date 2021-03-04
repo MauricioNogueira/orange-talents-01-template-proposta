@@ -7,6 +7,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 import org.slf4j.Logger;
@@ -22,9 +23,12 @@ import br.com.zup.proposta.dto.ResponseDto;
 import br.com.zup.proposta.models.Biometria;
 import br.com.zup.proposta.models.Bloqueio;
 import br.com.zup.proposta.models.Cartao;
+import br.com.zup.proposta.models.Viagem;
 import br.com.zup.proposta.repository.BiometriaRepository;
 import br.com.zup.proposta.repository.BloqueioRepository;
 import br.com.zup.proposta.repository.CartaoRepository;
+import br.com.zup.proposta.repository.ViagemRepository;
+import br.com.zup.proposta.requests.AvisoViagemRequest;
 import br.com.zup.proposta.requests.CadastroBiometriaRequest;
 import br.com.zup.proposta.util.ClientIpUtil;
 
@@ -34,15 +38,13 @@ public class CartaoService {
 	
 	@Autowired
 	private BloqueioRepository bloqueiaRepository;
-	
-	private final BiometriaRepository biometriaRepository;
-	private final CartaoRepository cartaoRepository;
+	@Autowired
+	private BiometriaRepository biometriaRepository;
+	@Autowired
+	private CartaoRepository cartaoRepository;
+	@Autowired
+	private ViagemRepository viagemRepository;
 	private final Logger logger = LoggerFactory.getLogger(CartaoService.class);
-	
-	public CartaoService(BiometriaRepository biometriaRepository, CartaoRepository cartaoRepository) {
-		this.biometriaRepository = biometriaRepository;
-		this.cartaoRepository = cartaoRepository;
-	}
 
 	@Transactional
 	public BiometriaDto cadastrar(CadastroBiometriaRequest request, String idCartao) {
@@ -63,14 +65,14 @@ public class CartaoService {
 		return null;
 	}
 
-	public ResponseDto bloquear(String idCartao, HttpServletRequest request) {
+	public ResponseDto bloquear(String identificador, HttpServletRequest request) {
 		
 		@NotBlank String ip = ClientIpUtil.get(request);
 		@NotBlank String userAgent = request.getHeader("User-Agent");
 		
 		try {			
 			
-			Optional<Cartao> optional = this.cartaoRepository.findById(idCartao);
+			Optional<Cartao> optional = this.cartaoRepository.findByIdentificador(identificador);
 			
 			if (optional.isPresent()) {
 				Cartao cartao = optional.get();
@@ -83,17 +85,17 @@ public class CartaoService {
 					return new ResponseDto("Cartão já foi bloquado", HttpStatus.UNPROCESSABLE_ENTITY);
 				}
 				
-				Bloqueio cancelado = new Bloqueio(ip, userAgent, cartao.getId());
+				Bloqueio bloqueio = new Bloqueio(ip, userAgent, cartao.getId(), cartao.getIdentificador());
 				
-				this.bloqueiaRepository.save(cancelado);
+				this.bloqueiaRepository.save(bloqueio);
 				
-				logger.info("Cartão bloqueado com sucesso: " + cancelado);
+				logger.info("Cartão bloqueado com sucesso: " + bloqueio);
 				
 				return new ResponseDto("Cartão bloqueado com sucesso", HttpStatus.OK);
 				
 			}
 			
-			logger.error("Cartão não foi encontrado: ID=" + idCartao);
+			logger.error("Cartão não foi encontrado: IDENTIFICADOR=" + identificador);
 			
 			return new ResponseDto("Cartão não foi encontrado", HttpStatus.NOT_FOUND);
 		} catch (ConstraintViolationException e) {
@@ -108,5 +110,37 @@ public class CartaoService {
 			return new ResponseDto("Não foi possível bloquear", HttpStatus.BAD_REQUEST, listaErros);
 		}
 		
+	}
+
+	public ResponseDto registrarAvisoViagem(@Valid AvisoViagemRequest request, String identificadorCartao,
+			HttpServletRequest servlet) {
+		
+		String ip = ClientIpUtil.get(servlet);
+		String userAgent = servlet.getHeader("User-Agent");
+		
+		Optional<Cartao> optional= this.cartaoRepository.findByIdentificador(identificadorCartao);
+		
+		if (!optional.isPresent()) {
+			return new ResponseDto("cartão não foi encontrado", HttpStatus.NOT_FOUND);
+		}
+		
+		try {
+			Viagem viagem = request.toModel(ip, userAgent, identificadorCartao);
+			
+			this.viagemRepository.save(viagem);
+			
+			return new ResponseDto("viagem registrada com sucesso", HttpStatus.OK);
+			
+		} catch (ConstraintViolationException e) {
+			List<FieldErrorDto> listaErros = new ArrayList<FieldErrorDto>();
+			
+			e.getConstraintViolations().forEach(error -> {
+				listaErros.add(new FieldErrorDto(error.getPropertyPath().toString(), error.getMessage()));
+			});
+			
+			logger.error("Dados incompletos para o aviso de viagens: | request: " + request + " | IP: " + ip + " | userAgent: " + userAgent + " | identificador: " + identificadorCartao);
+			
+			return new ResponseDto("dados incompletos para aviso de viagens", HttpStatus.BAD_REQUEST, listaErros);
+		}
 	}
 }

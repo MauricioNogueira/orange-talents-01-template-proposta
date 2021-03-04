@@ -27,13 +27,17 @@ public class Bloqueio {
 	
 	private boolean notificated = false;
 	
+	@NotBlank
+	private String identificador;
+	
 	@Deprecated
 	public Bloqueio() {}
 	
-	public Bloqueio(@NotBlank String ip, @NotBlank String userAgent, @NotBlank String numeroCartao) {
+	public Bloqueio(@NotBlank String ip, @NotBlank String userAgent, @NotBlank String numeroCartao, @NotBlank String identificador) {
 		this.ip = ip;
 		this.userAgent = userAgent;
 		this.numeroCartao = numeroCartao;
+		this.identificador = identificador;
 	}
 
 	public Long getId() {
@@ -60,6 +64,10 @@ public class Bloqueio {
 		return notificated;
 	}
 	
+	public String getIdentificador() {
+		return identificador;
+	}
+	
 	public void setNotificated(boolean notificated) {
 		this.notificated = notificated;
 	}
@@ -67,6 +75,6 @@ public class Bloqueio {
 	@Override
 	public String toString() {
 		return "Bloqueio [id=" + id + ", numeroCartao=" + numeroCartao + ", ip=" + ip + ", userAgent=" + userAgent
-				+ ", data=" + data + "]";
+				+ ", data=" + data + ", identificador=" + identificador + "]";
 	}
 }

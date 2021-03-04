@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import br.com.zup.proposta.enums.StatusCartao;
 import br.com.zup.proposta.models.Bloqueio;
 import br.com.zup.proposta.models.Cartao;
 import br.com.zup.proposta.repository.BloqueioRepository;
@@ -50,13 +51,13 @@ public class NotificarBloqueioCartaoSchedule {
 			lista.forEach(bloqueio -> {
 				bloqueio.setNotificated(true);
 				
-				Optional<Cartao> optional = this.cartaoRepository.findById(bloqueio.getNumeroCartao());
+				Optional<Cartao> optional = this.cartaoRepository.findByIdentificador(bloqueio.getIdentificador());
 				
 				if (optional.isPresent()) {
 					NotificacaoBloqueioResponse response = this.notificaBloqueioCartao.notificar(bloqueio.getNumeroCartao(), request);
 					
 					Cartao cartao = optional.get();
-					cartao.setStatus("BLOQUEADO");
+					cartao.setStatus(StatusCartao.valueOf(response.getResultado()));
 					
 					listaBloqueioAtualizada.add(bloqueio);
 					listaCartaoAtualizado.add(cartao);
