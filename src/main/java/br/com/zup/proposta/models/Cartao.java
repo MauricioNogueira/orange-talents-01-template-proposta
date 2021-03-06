@@ -44,6 +44,9 @@ public class Cartao {
 	
 	private String identificador;
 	
+	@OneToMany(mappedBy = "cartao", cascade = CascadeType.PERSIST)
+	private List<Viagem> viagens;
+	
 	@Deprecated
 	public Cartao() {}
 	
@@ -78,6 +81,14 @@ public class Cartao {
 	
 	public String getIdentificador() {
 		return this.identificador;
+	}
+	
+	public List<Viagem> getViagens() {
+		return viagens;
+	}
+	
+	public void addRegistroViagem(Viagem viagem) {
+		viagens.add(viagem);
 	}
 
 	@Override

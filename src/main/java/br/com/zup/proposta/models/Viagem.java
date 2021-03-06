@@ -3,10 +3,12 @@ package br.com.zup.proposta.models;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -36,6 +38,9 @@ public class Viagem {
 	@NotBlank
 	private String identificadorCartao;
 	
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	private Cartao cartao;
+	
 	@Deprecated
 	public Viagem() {}
 	
@@ -55,5 +60,9 @@ public class Viagem {
 	public String toString() {
 		return "Viagem [id=" + id + ", destino=" + destino + ", dataTermino=" + dataTermino + ", dataAviso=" + dataAviso
 				+ ", ip=" + ip + ", userAgent=" + userAgent + ", identificadorCartao=" + identificadorCartao + "]";
+	}
+
+	public void setCartao(Cartao cartao) {
+		this.cartao = cartao;
 	}
 }

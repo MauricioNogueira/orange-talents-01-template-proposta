@@ -117,6 +117,7 @@ public class CartaoService {
 		
 	}
 
+	@Transactional
 	public ResponseDto registrarAvisoViagem(@Valid AvisoViagemRequest request, String identificadorCartao,
 			HttpServletRequest servlet) {
 		
@@ -131,11 +132,17 @@ public class CartaoService {
 		
 		try {
 			Viagem viagem = request.toModel(ip, userAgent, identificadorCartao);
+			Cartao cartao = optional.get();
 			
 			FeignAvisoRequest requestAviso = new FeignAvisoRequest(request.getDestino(), viagem.getDataTermino().toString());
 			this.accontsService.aviso(optional.get().getId(), requestAviso);
 			
-			this.viagemRepository.save(viagem);
+			viagem.setCartao(cartao);
+			viagem = this.viagemRepository.save(viagem);
+	
+			cartao.addRegistroViagem(viagem);
+			
+			this.cartaoRepository.save(cartao);
 			logger.info("aviso de viagem registrado com sucesso: "+ viagem);
 			
 			return new ResponseDto("viagem registrada com sucesso", HttpStatus.OK);
