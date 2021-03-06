@@ -30,7 +30,9 @@ import br.com.zup.proposta.repository.CartaoRepository;
 import br.com.zup.proposta.repository.ViagemRepository;
 import br.com.zup.proposta.requests.AvisoViagemRequest;
 import br.com.zup.proposta.requests.CadastroBiometriaRequest;
+import br.com.zup.proposta.requests.FeignAvisoRequest;
 import br.com.zup.proposta.util.ClientIpUtil;
+import feign.FeignException;
 
 @Service
 @Validated
@@ -44,6 +46,9 @@ public class CartaoService {
 	private CartaoRepository cartaoRepository;
 	@Autowired
 	private ViagemRepository viagemRepository;
+	@Autowired
+	private AccountsService accontsService;
+	
 	private final Logger logger = LoggerFactory.getLogger(CartaoService.class);
 
 	@Transactional
@@ -127,7 +132,11 @@ public class CartaoService {
 		try {
 			Viagem viagem = request.toModel(ip, userAgent, identificadorCartao);
 			
+			FeignAvisoRequest requestAviso = new FeignAvisoRequest(request.getDestino(), viagem.getDataTermino().toString());
+			this.accontsService.aviso(optional.get().getId(), requestAviso);
+			
 			this.viagemRepository.save(viagem);
+			logger.info("aviso de viagem registrado com sucesso: "+ viagem);
 			
 			return new ResponseDto("viagem registrada com sucesso", HttpStatus.OK);
 			
@@ -141,6 +150,10 @@ public class CartaoService {
 			logger.error("Dados incompletos para o aviso de viagens: | request: " + request + " | IP: " + ip + " | userAgent: " + userAgent + " | identificador: " + identificadorCartao);
 			
 			return new ResponseDto("dados incompletos para aviso de viagens", HttpStatus.BAD_REQUEST, listaErros);
+		} catch (FeignException e) {
+			logger.error("erro ao registrar aviso de viagem: request=" + request + " | identificador=" + identificadorCartao);
+			
+			return new ResponseDto("não foi possível registrar o aviso de viagem", HttpStatus.BAD_REQUEST);
 		}
 	}
 }

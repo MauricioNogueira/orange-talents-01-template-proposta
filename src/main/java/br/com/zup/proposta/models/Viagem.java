@@ -46,6 +46,10 @@ public class Viagem {
 		this.userAgent = userAgent;
 		this.identificadorCartao = identificadorCartao;
 	}
+	
+	public LocalDate getDataTermino() {
+		return dataTermino;
+	}
 
 	@Override
 	public String toString() {
