@@ -20,17 +20,23 @@ import org.springframework.validation.annotation.Validated;
 import br.com.zup.proposta.dto.BiometriaDto;
 import br.com.zup.proposta.dto.FieldErrorDto;
 import br.com.zup.proposta.dto.ResponseDto;
+import br.com.zup.proposta.enums.TipoCarteira;
 import br.com.zup.proposta.models.Biometria;
 import br.com.zup.proposta.models.Bloqueio;
 import br.com.zup.proposta.models.Cartao;
+import br.com.zup.proposta.models.Carteira;
 import br.com.zup.proposta.models.Viagem;
 import br.com.zup.proposta.repository.BiometriaRepository;
 import br.com.zup.proposta.repository.BloqueioRepository;
 import br.com.zup.proposta.repository.CartaoRepository;
+import br.com.zup.proposta.repository.CarteiraRepository;
 import br.com.zup.proposta.repository.ViagemRepository;
+import br.com.zup.proposta.requests.AssociarCarteiraRequest;
 import br.com.zup.proposta.requests.AvisoViagemRequest;
 import br.com.zup.proposta.requests.CadastroBiometriaRequest;
+import br.com.zup.proposta.requests.FeignAssociarCarteiraRequest;
 import br.com.zup.proposta.requests.FeignAvisoRequest;
+import br.com.zup.proposta.util.AESUtil;
 import br.com.zup.proposta.util.ClientIpUtil;
 import feign.FeignException;
 
@@ -48,6 +54,10 @@ public class CartaoService {
 	private ViagemRepository viagemRepository;
 	@Autowired
 	private AccountsService accontsService;
+	@Autowired
+	private CarteiraRepository carteiraRepository;
+	@Autowired
+	private AESUtil aesUtil;
 	
 	private final Logger logger = LoggerFactory.getLogger(CartaoService.class);
 
@@ -162,5 +172,41 @@ public class CartaoService {
 			
 			return new ResponseDto("não foi possível registrar o aviso de viagem", HttpStatus.BAD_REQUEST);
 		}
+	}
+	
+	@Transactional
+	public ResponseDto associar(AssociarCarteiraRequest request, String identificador) {
+		try {
+			Optional<Cartao> optionalCartao = this.cartaoRepository.findByIdentificador(identificador);
+			
+			if (optionalCartao.isPresent()) {
+				Cartao cartao = optionalCartao.get();
+				
+				Optional<Carteira> optionalCarteira = this.carteiraRepository.findByTipoAndCartaoId(TipoCarteira.valueOf(request.getTipo()), cartao.getId());
+				
+				if (!optionalCarteira.isPresent()) {
+					Carteira carteira = request.toModel(cartao);
+					this.accontsService.associar(this.aesUtil.decrypt(cartao.getId()), new FeignAssociarCarteiraRequest(request.getEmail(), request.getTipo()));
+					
+					carteira = this.carteiraRepository.save(carteira);
+					this.cartaoRepository.save(cartao);
+					
+					logger.info("carteira cadastrada com sucesso");
+					
+					return new ResponseDto("carteira cadastrada com sucesso", HttpStatus.CREATED, carteira);
+				}
+				
+				logger.error("você já possui dados com esta carteira");
+				return new ResponseDto("você já possui dados com esta carteira", HttpStatus.UNPROCESSABLE_ENTITY);
+			}
+			
+			logger.error("cartão não foi encontrado");
+			return new ResponseDto("cartão não foi encontrado", HttpStatus.NOT_FOUND);
+		} catch (FeignException e) {
+			e.printStackTrace();
+			logger.error("não foi possível criar carteira");
+			return new ResponseDto("não foi possível criar carteira", HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+		
 	}
 }

@@ -47,6 +47,9 @@ public class Cartao {
 	@OneToMany(mappedBy = "cartao", cascade = CascadeType.PERSIST)
 	private List<Viagem> viagens;
 	
+	@OneToMany(mappedBy = "cartao", cascade = CascadeType.PERSIST)
+	private List<Carteira> carteiras;
+	
 	@Deprecated
 	public Cartao() {}
 	

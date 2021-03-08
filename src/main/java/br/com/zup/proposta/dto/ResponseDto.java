@@ -18,6 +18,9 @@ public class ResponseDto {
 	@JsonInclude(value = Include.NON_NULL)
 	private List<FieldErrorDto> erros;
 	
+	@JsonInclude(value = Include.NON_NULL)
+	private Object data;
+	
 	public ResponseDto(String mensagem, HttpStatus status) {
 		this.mensagem = mensagem;
 		this.status = status;
@@ -27,6 +30,12 @@ public class ResponseDto {
 		this.mensagem = mensagem;
 		this.status = status;
 		this.erros = erros;
+	}
+	
+	public ResponseDto(String mensagem, HttpStatus status, Object data) {
+		this.mensagem = mensagem;
+		this.status = status;
+		this.data = data;
 	}
 
 	public String getMensagem() {
@@ -39,5 +48,9 @@ public class ResponseDto {
 
 	public List<FieldErrorDto> getErros() {
 		return erros;
+	}
+	
+	public Object getData() {
+		return data;
 	}
 }

@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +17,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.zup.proposta.dto.BiometriaDto;
 import br.com.zup.proposta.dto.ResponseDto;
+import br.com.zup.proposta.models.Carteira;
+import br.com.zup.proposta.requests.AssociarCarteiraRequest;
 import br.com.zup.proposta.requests.AvisoViagemRequest;
 import br.com.zup.proposta.requests.CadastroBiometriaRequest;
 import br.com.zup.proposta.service.CartaoService;
@@ -52,6 +55,21 @@ public class CartaoController {
 	public ResponseEntity<ResponseDto> avisoViagem(@RequestBody @Valid AvisoViagemRequest request, @PathVariable("id") String identificadorCartao, HttpServletRequest servlet) {
 		
 		ResponseDto response = this.cartaoService.registrarAvisoViagem(request, identificadorCartao, servlet);
+		
+		return ResponseEntity.status(response.getStatus()).body(response);
+	}
+	
+	@PostMapping("/{identificador}/associar-carteira")
+	public ResponseEntity<ResponseDto> associar(@PathVariable("identificador") String identificador, @RequestBody @Valid AssociarCarteiraRequest request, UriComponentsBuilder builder) {
+		ResponseDto response = this.cartaoService.associar(request, identificador);
+		
+		if (response.getStatus().value() == 201) {
+			Carteira carteira = (Carteira) response.getData();
+			
+			URI location = builder.path("/api/cartoes/{id}/carteiras").buildAndExpand(carteira.getId()).toUri();
+			
+			return ResponseEntity.created(location).body(response);
+		}
 		
 		return ResponseEntity.status(response.getStatus()).body(response);
 	}

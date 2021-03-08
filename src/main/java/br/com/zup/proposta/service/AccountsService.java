@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import br.com.zup.proposta.requests.FeignAssociarCarteiraRequest;
 import br.com.zup.proposta.requests.FeignAvisoRequest;
 import br.com.zup.proposta.response.DadosCartaoResponse;
 
@@ -17,4 +18,7 @@ public interface AccountsService {
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/cartoes/{id}/avisos")
 	public String aviso(@PathVariable("id") String id, FeignAvisoRequest request);
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/cartoes/{id}/carteiras")
+	public String associar(@PathVariable("id") String id, FeignAssociarCarteiraRequest request);
 }
